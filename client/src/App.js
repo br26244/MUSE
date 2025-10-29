@@ -42,7 +42,7 @@ function App() {
     try{
       const genreParam = selectedGenres.length > 0 ? selectedGenres.join('&') : 'soul';
       const yearParam = `${startYear}-${endYear}`;
-      const response = await fetch(`/api/random?genre=${genreParam}&year=${yearParam}`);
+      const response = await fetch(`https://muse-jw19.onrender.com/api/random?genre=${genreParam}&year=${yearParam}`);
       const data = await response.json();
 
       if(data.error){
