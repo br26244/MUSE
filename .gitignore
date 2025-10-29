@@ -1,0 +1,11 @@
+server/.env
+client/.env
+*.env
+*.env.*
+.DS_Store
+node_modules/
+client/node_modules/
+server/node_modules/
+client/public
+client/src/logo.svg
+package-lock.json
