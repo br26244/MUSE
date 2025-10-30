@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 function App() {
-  const [Track, setTrack] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [selectedGenres, setSelectedGenres] = useState(['soul']);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [startYear, setStartYear] = useState(1970);
-  const [endYear, setEndYear] = useState(1980);
+  const [Track, setTrack] = useState(null); // Track data
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(null); // Error state
+  const [selectedGenres, setSelectedGenres] = useState(['soul']); // Selected genres
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown state
+  const [startYear, setStartYear] = useState(1970); // Start year
+  const [endYear, setEndYear] = useState(1980); // End year
 
   const genres = [
     'rock',
@@ -25,7 +25,7 @@ function App() {
     'funk',
   ];
 
-  const toggleGenre = (genre) => {
+  const toggleGenre = (genre) => { // Toggle genre selection
     setSelectedGenres(prev => {
       if(prev.includes(genre)){
         return prev.filter(g => g !== genre);
@@ -36,7 +36,7 @@ function App() {
     });
   };
 
-  const fetchTrack = async () => {
+  const fetchTrack = async () => { // Fetch random track from backend
     setLoading(true);
     setError("");
     try{
@@ -64,11 +64,11 @@ function App() {
 
   useEffect(() => {
     fetchTrack();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint disable next line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container}> 
       <h1 style={styles.title}>Random Track</h1>
 
       <div style={styles.controlsWrapper}>

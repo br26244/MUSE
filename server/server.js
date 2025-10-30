@@ -10,19 +10,19 @@ const PORT = process.env.PORT || 3001;
 
 let accToken = "";
 let tokExpiration = 0;
-
+// Middleware
 app.use(cors({
-    origin: process.env.FRONTEND_URL || '*', // We'll set this later
+    origin: process.env.FRONTEND_URL || '*', 
     credentials: true
 }));
-
+// endpoint to get a random track based on genre and year
 app.get("/api/random", async (req, res) => {
     const {genre = "soul", year = "1970-1980"} = req.query;
 
     try{
-        const genreList = genre.split(/[,&]/);
+        const genreList = genre.split(/[,&]/); //split by com
         const randomGenre = genreList[Math.floor(Math.random() * genreList.length)];
-        const DiscogResp = await axios.get("https://api.discogs.com/database/search" , {
+        const DiscogResp = await axios.get("https://api.discogs.com/database/search" , { // Fetch from Discogs API
             params: {
                 genre,
                 year,
@@ -34,16 +34,16 @@ app.get("/api/random", async (req, res) => {
             headers: {"User-Agent": "RandomSampleApp/1.0"},
         });
 
-        const releases = DiscogResp.data.results;
+        const releases = DiscogResp.data.results; // Get releases from response
 
         if(releases.length === 0){
             return res.json({error: "No releases found for the specified genre and year."});
         }
-        const randomSelect = releases[Math.floor(Math.random() * releases.length)];
+        const randomSelect = releases[Math.floor(Math.random() * releases.length)]; // Select a random release
         const artist = randomSelect.title.split(" - ")[0] || "Unknown Artist";
         const track = randomSelect.title.split(" - ")[1] || "Unknown Track";
 
-        const ytResp = await axios.get("https://www.googleapis.com/youtube/v3/search", {
+        const ytResp = await axios.get("https://www.googleapis.com/youtube/v3/search", { // Fetch from YouTube API
             params: {
                 part: "snippet",
                 q: `${artist} ${track}`,
@@ -64,7 +64,7 @@ app.get("/api/random", async (req, res) => {
             title: randomSelect.title,
             year: randomSelect.year || year,
             track,
-            discogsUrl: `https://www.discogs.com${randomSelect.uri}`,
+            discogsUrl: `https://www.discogs.com${randomSelect.uri}`, //discogs n youtube url
             youtubeUrl: `https://www.youtube.com/watch?v=${videos[0].id.videoId}`,
             thumbnail: videos[0].snippet.thumbnails.high.url,
             channel: videos[0].snippet.channelTitle,
