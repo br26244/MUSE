@@ -25,7 +25,7 @@ function App() {
     'funk',
   ];
 
-  const toggleGenre = (genre) => { // Toggle genre selection
+  const toggleGenre = (genre) => { //
     setSelectedGenres(prev => {
       if(prev.includes(genre)){
         return prev.filter(g => g !== genre);
