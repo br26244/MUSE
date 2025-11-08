@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import Button from '@mui/joy/Button';
+import Input from '@mui/joy/Input';
+import Checkbox from '@mui/joy/Checkbox';
+
+
 
 function App() {
   const [Track, setTrack] = useState(null); // Track data
@@ -27,10 +32,10 @@ function App() {
 
   const toggleGenre = (genre) => { //
     setSelectedGenres(prev => {
-      if(prev.includes(genre)){
+      if (prev.includes(genre)) {
         return prev.filter(g => g !== genre);
       }
-      else{
+      else {
         return [...prev, genre];
       }
     });
@@ -39,62 +44,63 @@ function App() {
   const fetchTrack = async () => { // Fetch random track from backend
     setLoading(true);
     setError("");
-    try{
+    try {
       const genreParam = selectedGenres.length > 0 ? selectedGenres.join('&') : 'soul';
       const yearParam = `${startYear}-${endYear}`;
       const response = await fetch(`https://muse-jw19.onrender.com/api/random?genre=${genreParam}&year=${yearParam}`);
       const data = await response.json();
 
-      if(data.error){
+      if (data.error) {
         setError(data.error);
         setTrack(null);
       }
-      else{
+      else {
         setTrack(data);
       }
     }
-    catch(err){
+    catch (err) {
       setError("Failed to find a track. Please try again.");
       setTrack(null);
     }
-    finally{
+    finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchTrack();
-  // eslint disable next line react-hooks/exhaustive-deps
+    // eslint disable next line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div style={styles.container}> 
-      <h1 style={styles.title}>Random Track</h1>
-
+    <div style={styles.container}>
+      <h1 style={styles.title}>MUSE</h1>
+      <p>A musician's tool for inspiration</p>
       <div style={styles.controlsWrapper}>
         <div style={styles.dropdownContainer}>
-          <button 
+          <Button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             style={styles.dropdownButton}
           >
             <span>
               {selectedGenres.length === 0 ? 'Select Genres'
-              : `${selectedGenres.length} Genre${selectedGenres.length > 1 ? 's' : ''} selected`}
+                : `${selectedGenres.length} Genre${selectedGenres.length > 1 ? 's' : ''} selected`}
             </span>
             <span style={styles.arrow}>{isDropdownOpen ? '▲' : '▼'}</span>
-          </button>
+          </Button>
 
           {isDropdownOpen && (
             <div style={styles.dropdownMenu}>
               {genres.map(genre => (
                 <label key={genre} style={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
+                  <Checkbox
+                    color="primary"
+                    variant="soft"
+                    label={genre}
                     checked={selectedGenres.includes(genre)}
                     onChange={() => toggleGenre(genre)}
-                    style={styles.checkbox}
                   />
-                  <span style={styles.genreName}>{genre}</span>
+                  
                 </label>
               ))}
             </div>
@@ -106,7 +112,7 @@ function App() {
             {selectedGenres.map(genre => (
               <span key={genre} style={styles.tag}>
                 {genre}
-                <button 
+                <button
                   onClick={() => toggleGenre(genre)}
                   style={styles.removeTag}
                 >
@@ -120,7 +126,9 @@ function App() {
         <div style={styles.yearContainer}>
           <label style={styles.yearLabel}>
             <span style={styles.yearText}>Start Year:</span>
-            <input
+            <Input
+              color="primary"
+              placeholder="year"
               type="number"
               min="1900"
               max="2024"
@@ -131,7 +139,9 @@ function App() {
           </label>
           <label style={styles.yearLabel}>
             <span style={styles.yearText}>End Year:</span>
-            <input
+            <Input
+              color="primary"
+              placeholder="year"
               type="number"
               min="1900"
               max="2024"
@@ -148,7 +158,7 @@ function App() {
 
       {Track && (
         <div style={styles.card}>
-          <h2>{Track.artist}</h2>
+          <h2>{Track.artist} ({Track.year})</h2>
           <p>{Track.track}</p>
           <iframe
             width="100%"
@@ -161,26 +171,26 @@ function App() {
           ></iframe>
 
           <p style={styles.discogsLink}>
-            <a href={Track.discogsUrl} target="_blank" rel="noreferrer" style={styles.link}>
+            <Button component="a" href={Track.discogsUrl} target="_blank" rel="noreferrer">
               View on Discogs
-            </a>
+            </Button>
           </p>
         </div>
       )}
 
-      <button onClick={fetchTrack} style={styles.button}>
+      <Button onClick={fetchTrack} style={styles.button}>
         Find Another Track
-      </button>
+      </Button>
     </div>
   );
 }
 
 const styles = {
   container: {
-    fontFamily: "sans-serif",
+    fontFamily: "monospace",
     textAlign: "center",
     padding: "2rem",
-    backgroundColor: "#111",
+    backgroundColor: "#112",
     color: "#fff",
     minHeight: "100vh",
   },
@@ -203,7 +213,7 @@ const styles = {
     width: '100%',
     padding: '10px 20px',
     fontSize: '16px',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#f54242',
     color: 'white',
     border: 'none',
     borderRadius: '5px',
@@ -216,6 +226,15 @@ const styles = {
   arrow: {
     fontSize: '12px'
   },
+  title: {
+    fontSize: '50px',
+    fontWeight: '800',
+    color: 'white',
+    textAlign: 'center',
+    marginTop: '5px',
+    marginBottom: '1px'
+  },
+
   dropdownMenu: {
     position: 'absolute',
     top: '100%',
@@ -261,7 +280,7 @@ const styles = {
     backgroundColor: '#e0e0e0',
     padding: '5px 10px',
     borderRadius: '15px',
-    fontSize: '14px',
+    fontSize: '16px',
     display: 'inline-flex',
     alignItems: 'center',
     gap: '5px',
@@ -271,7 +290,7 @@ const styles = {
   removeTag: {
     background: 'none',
     border: 'none',
-    fontSize: '18px',
+    fontSize: '15px',
     cursor: 'pointer',
     padding: '0 5px',
     color: '#666'
@@ -304,14 +323,15 @@ const styles = {
   },
   card: {
     backgroundColor: "#222",
-    borderRadius: "12px",
-    padding: "1.5rem",
+    borderRadius: "20px",
+    padding: "2.5rem",
     margin: "0 auto 1.5rem auto",
     maxWidth: "600px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+    boxShadow: "0 0px 30px rgba(255, 255, 255, 0.4)",
   },
   discogsLink: {
-    marginTop: '1rem'
+    marginTop: '2rem',
+    marginBottom: '0.5rem'
   },
   link: {
     color: '#1db954',
@@ -319,7 +339,7 @@ const styles = {
     fontSize: '1rem'
   },
   button: {
-    backgroundColor: "#1db954",
+    backgroundColor: "#f54242",
     color: "white",
     border: "none",
     borderRadius: "8px",
