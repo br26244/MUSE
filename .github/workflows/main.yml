@@ -1,0 +1,12 @@
+name: KeepUp
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch: 
+
+jobs:
+  ping-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping
+        run: curl -s "https://musicmuse.xyz/"
