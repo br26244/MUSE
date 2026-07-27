@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import Checkbox from '@mui/joy/Checkbox';
@@ -41,7 +41,7 @@ function App() {
     });
   };
 
-  const fetchTrack = async () => { // Fetch random track from backend
+  const fetchTrack = useCallback(async () => { // Fetch random track from backend
     setLoading(true);
     setError("");
     try {
@@ -78,12 +78,11 @@ function App() {
     finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchTrack();
-    // eslint disable next line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchTrack]);
 
   return (
     <div style={styles.container}>
