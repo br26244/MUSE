@@ -78,7 +78,7 @@ function App() {
     finally {
       setLoading(false);
     }
-  }, []);
+  }, [endYear, selectedGenres, startYear]);
 
   useEffect(() => {
     fetchTrack();
@@ -203,10 +203,6 @@ const styles = {
     backgroundColor: "#112",
     color: "#fff",
     minHeight: "100vh",
-  },
-  title: {
-    fontSize: "2rem",
-    marginBottom: "1.5rem",
   },
   controlsWrapper: {
     display: 'flex',
