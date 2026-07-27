@@ -10,14 +10,21 @@ const PORT = process.env.PORT || 3001;
 
 let accToken = "";
 let tokExpiration = 0;
+let cached = null;
+let fetchTime = 0;
 // Middleware
 app.use(cors({
     origin: process.env.FRONTEND_URL || '*', 
     credentials: true
 }));
 // endpoint to get a random track based on genre and year
+app.get("/ping", (req, res) => {
+  res.send("ok");
+});
+
 app.get("/api/random", async (req, res) => {
     const {genre = "soul", year = "1970-1980"} = req.query;
+    const now = Date.now();
 
     try{
         const genreList = genre.split(/[,&]/); //split by com

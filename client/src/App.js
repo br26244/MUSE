@@ -11,8 +11,8 @@ function App() {
   const [error, setError] = useState(null); // Error state
   const [selectedGenres, setSelectedGenres] = useState(['soul']); // Selected genres
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown state
-  const [startYear, setStartYear] = useState(1970); // Start year
-  const [endYear, setEndYear] = useState(1980); // End year
+  const [startYear, setStartYear] = useState("1970"); // Start year
+  const [endYear, setEndYear] = useState("1980"); // End year
 
   const genres = [
     'rock',
@@ -46,6 +46,19 @@ function App() {
     setError("");
     try {
       const genreParam = selectedGenres.length > 0 ? selectedGenres.join('&') : 'soul';
+      const start = parseInt(startYear, 10);
+      const end = parseInt(endYear, 10);
+
+      if (isNaN(start) || isNaN(end)) {
+        setError("Please enter valid start and end years.");
+        setLoading(false);
+        return;
+      }
+      if (start > end) {
+        setError("Start year must be before end year.");
+        setLoading(false);
+        return;}
+
       const yearParam = `${startYear}-${endYear}`;
       const response = await fetch(`https://muse-jw19.onrender.com/api/random?genre=${genreParam}&year=${yearParam}`);
       const data = await response.json();
@@ -130,10 +143,8 @@ function App() {
               color="primary"
               placeholder="year"
               type="number"
-              min="1900"
-              max="2024"
               value={startYear}
-              onChange={(e) => setStartYear(parseInt(e.target.value) || 1900)}
+              onChange={(e) => setStartYear(parseInt(e.target.value))}
               style={styles.yearInput}
             />
           </label>
@@ -146,7 +157,7 @@ function App() {
               min="1900"
               max="2024"
               value={endYear}
-              onChange={(e) => setEndYear(parseInt(e.target.value) || 2024)}
+              onChange={(e) => setEndYear(parseInt(e.target.value))}
               style={styles.yearInput}
             />
           </label>
