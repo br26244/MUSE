@@ -13,6 +13,7 @@ function App() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown state
   const [startYear, setStartYear] = useState("1970"); // Start year
   const [endYear, setEndYear] = useState("1980"); // End year
+  const [dots, setDots] = useState(''); // Animated loading dots
 
   const genres = [
     'rock',
@@ -83,6 +84,17 @@ function App() {
   useEffect(() => {
     fetchTrack();
   }, [fetchTrack]);
+
+  useEffect(() => {
+    if (!loading) {
+      setDots('');
+      return;
+    }
+    const interval = setInterval(() => {
+      setDots(prev => (prev.length >= 3 ? '' : prev + '.'));
+    }, 400);
+    return () => clearInterval(interval);
+  }, [loading]);
 
   return (
     <div style={styles.container}>
@@ -163,7 +175,7 @@ function App() {
         </div>
       </div>
 
-      {loading && <p>Loading...</p>}
+      {loading && <p>Loading<span style={styles.loadingDots}>{dots}</span></p>}
       {error && <p style={styles.error}>{error}</p>}
 
       {Track && (
@@ -357,6 +369,11 @@ const styles = {
   error: {
     color: "tomato",
     marginBottom: '1rem'
+  },
+  loadingDots: {
+    display: 'inline-block',
+    width: '1.5em',
+    textAlign: 'left'
   }
 };
 
