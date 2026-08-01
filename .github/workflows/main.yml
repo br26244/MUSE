@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping
-        run: curl -s "https://musicmuse.xyz/"
+        run: curl -s "https://muse-jw19.onrender.com"
